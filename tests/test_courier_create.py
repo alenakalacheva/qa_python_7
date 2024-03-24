@@ -13,15 +13,15 @@ class TestCourierCreate:
         assert response.status_code == 201 and response.text == '{"ok":true}'
 
     @allure.title('Проверка создания курьера без имени')
-    def test_create_courier_without_name(self, new_courier_no_name):
-        payload = new_courier_no_name
+    def test_create_courier_without_name(self, new_courier):
+        payload = new_courier
         del payload["firstName"]
         response = requests.post(Endpoints.COURIER, data=payload)
         assert response.status_code == 201 and response.text == '{"ok":true}'
 
     @allure.title('Проверка невозможности создать дубль курьера')
-    def test_courier_duplicate(self, new_courier_no_del):
-        payload = new_courier_no_del
+    def test_courier_duplicate(self, new_courier):
+        payload = new_courier
         requests.post(Endpoints.COURIER, data=payload)
         response = requests.post(Endpoints.COURIER, data=payload)
         assert response.status_code == 409 and response.json()["message"] == Data.ERROR_MESSAGE_1
